@@ -173,6 +173,7 @@ public class CoolIndicator extends ProgressBar {
 			@Override
 			public void onAnimationCancel(Animator animator) {
 				mClipRegion = 0f;
+				setVisibilityImmediately(GONE);
 				mIsRunning = false;
 			}
 

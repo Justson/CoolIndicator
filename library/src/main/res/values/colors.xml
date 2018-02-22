@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorProgressGradientStart">#FF9400FF</color>
-    <color name="colorProgressGradientEnd">#FFFF1AD9</color>
+    <color name="colorProgressGradientStart">#f75acb</color>
+    <color name="colorProgressGradientEnd">#1ae8ff</color>
 </resources>
