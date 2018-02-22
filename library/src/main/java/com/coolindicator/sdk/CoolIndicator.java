@@ -70,7 +70,7 @@ public class CoolIndicator extends ProgressBar {
 		@Override
 		public void onAnimationUpdate(ValueAnimator animation) {
 
-			Log.i(TAG, "animation:" + (int) mPrimaryAnimator.getAnimatedValue());
+//			Log.i(TAG, "animation:" + (int) mPrimaryAnimator.getAnimatedValue());
 			setProgressImmediately((int) mPrimaryAnimator.getAnimatedValue());
 		}
 	};
@@ -230,9 +230,11 @@ public class CoolIndicator extends ProgressBar {
 	private boolean mIsRunning = false;
 
 	public void start() {
+		Log.i(TAG, "start:" + mIsRunning);
 		if (mIsRunning) {
 			return;
 		}
+		mIsRunning = true;
 		this.setVisibility(View.VISIBLE);
 		setProgressImmediately(0);
 		setProgressInternal(95);
