@@ -58,7 +58,7 @@ public class CoolIndicator extends ProgressBar {
 	private final static int FINISHED_DURATION = 300;
 	private ValueAnimator mPrimaryAnimator;
 	private ValueAnimator mShrinkAnimator = ValueAnimator.ofFloat(0f, 1f);
-	private ValueAnimator mAlphaAnimator = ValueAnimator.ofFloat(1f, 0f);
+	private ValueAnimator mAlphaAnimator = ValueAnimator.ofFloat(1f, 0.25f);
 	private float mClipRegion = 0f;
 	private int mExpectedProgress = 0;
 	private Rect tempRect;
@@ -104,7 +104,7 @@ public class CoolIndicator extends ProgressBar {
 	private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
 		tempRect = new Rect();
 
-		this.setProgressDrawable(context.getResources().getDrawable(R.drawable.photon_progressbar));
+		this.setProgressDrawable(context.getResources().getDrawable(R.drawable.drawable_indicator));
 		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CoolIndicator);
 		final int duration = a.getInteger(R.styleable.CoolIndicator_shiftDuration, 1000);
 		final int resID = a.getResourceId(R.styleable.CoolIndicator_shiftInterpolator, 0);
@@ -126,7 +126,7 @@ public class CoolIndicator extends ProgressBar {
 		});
 
 		mClosingAnimatorSet = new AnimatorSet();
-		mAlphaAnimator.setDuration(CLOSING_DURATION);
+		mAlphaAnimator.setDuration(CLOSING_DURATION );
 		mAlphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
@@ -168,6 +168,7 @@ public class CoolIndicator extends ProgressBar {
 			public void onAnimationEnd(Animator animator) {
 				setVisibilityImmediately(GONE);
 				mIsRunning = false;
+				mIsRunningCompleteAnimation = false;
 			}
 
 			@Override
@@ -175,6 +176,7 @@ public class CoolIndicator extends ProgressBar {
 				mClipRegion = 0f;
 				setVisibilityImmediately(GONE);
 				mIsRunning = false;
+				mIsRunningCompleteAnimation = false;
 			}
 
 			@Override
@@ -229,6 +231,7 @@ public class CoolIndicator extends ProgressBar {
 	}
 
 	private boolean mIsRunning = false;
+	private boolean mIsRunningCompleteAnimation = false;
 
 	public void start() {
 		Log.i(TAG, "start:" + mIsRunning);
@@ -238,11 +241,17 @@ public class CoolIndicator extends ProgressBar {
 		mIsRunning = true;
 		this.setVisibility(View.VISIBLE);
 		setProgressImmediately(0);
-		setProgressInternal(95);
+		setProgressInternal(92);
 	}
 
 	public void complete() {
-		setProgressInternal(100);
+		if (mIsRunningCompleteAnimation) {
+			return;
+		}
+		if (mIsRunning) {
+			mIsRunningCompleteAnimation = true;
+			setProgressInternal(100);
+		}
 	}
 
 	public void cancel() {
