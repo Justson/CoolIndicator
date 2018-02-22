@@ -1,4 +1,4 @@
-package com.just.library;
+package com.coolindicator.sdk;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
 		// Context of the app under test.
 		Context appContext = InstrumentationRegistry.getTargetContext();
 
-		assertEquals("com.just.library.test", appContext.getPackageName());
+		assertEquals("com.coolindicator.sdk.test", appContext.getPackageName());
 	}
 }

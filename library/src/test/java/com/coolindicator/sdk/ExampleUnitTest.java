@@ -1,4 +1,4 @@
-package com.just.library;
+package com.coolindicator.sdk;
 
 import org.junit.Test;
 
