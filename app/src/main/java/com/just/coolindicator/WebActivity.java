@@ -1,4 +1,3 @@
-
 /*
  * MIT License
  *
@@ -22,38 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package com.just.coolindicator;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-
-import com.coolindicator.sdk.CoolIndicatorLayout;
-import com.just.agentweb.AgentWeb;
-
-
 
 /**
  * @author cenxiaozhong
  * @date 2018/2/23
  * @since 1.0.0
  */
-public class AgentWebActivity extends AppCompatActivity {
+
+public class WebActivity  extends AppCompatActivity{
+
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_agent_web);
-
-		CoolIndicatorLayout mCoolIndicatorLayout = new CoolIndicatorLayout(this);
-		AgentWeb.with(this)
-				.setAgentWebParent((ViewGroup) findViewById(R.id.framelayout), new FrameLayout.LayoutParams(-1, -1))
-				.setCustomIndicator(mCoolIndicatorLayout)
-				.interceptUnkownUrl()
-				.setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
-				.createAgentWeb()
-				.ready()
-				.go("https://m.vip.com/?source=www&jump_https=1");
+	public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+		super.onCreate(savedInstanceState, persistentState);
 	}
 }

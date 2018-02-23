@@ -25,16 +25,16 @@
 
 package com.coolindicator.sdk;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.just.agentweb.AgentWebUtils;
 import com.just.agentweb.BaseIndicatorView;
-
 
 
 public class CoolIndicatorLayout extends BaseIndicatorView {
@@ -51,10 +51,14 @@ public class CoolIndicatorLayout extends BaseIndicatorView {
 
 	public CoolIndicatorLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		mCoolIndicator = new CoolIndicator(context, null, android.R.style.Widget_Material_ProgressBar_Horizontal);
-		mCoolIndicator.setMax(100);
+		mCoolIndicator = CoolIndicator.create((Activity) context);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			mCoolIndicator.setProgressDrawable(context.getResources().getDrawable(R.drawable.default_drawable_indicator, context.getTheme()));
+		} else {
+			mCoolIndicator.setProgressDrawable(context.getResources().getDrawable(R.drawable.default_drawable_indicator));
+		}
+
 		this.addView(mCoolIndicator, offerLayoutParams());
-//		mAnimatedProgressBar.setScrollBarFadeDuration(500);
 
 	}
 
@@ -66,7 +70,6 @@ public class CoolIndicatorLayout extends BaseIndicatorView {
 
 	@Override
 	public void setProgress(int newProgress) {
-		Log.i(TAG, "newProgress:" + newProgress);
 	}
 
 	@Override

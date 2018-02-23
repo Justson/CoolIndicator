@@ -31,6 +31,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -64,17 +65,32 @@ public class CoolIndicator extends ProgressBar {
 	private Rect tempRect;
 	private boolean mIsRtl;
 	private static final String TAG = CoolIndicator.class.getSimpleName();
+	private boolean mIsRunning = false;
+	private boolean mIsRunningCompleteAnimation = false;
+	private AccelerateDecelerateInterpolator mAccelerateDecelerateInterpolator = new AccelerateDecelerateInterpolator();
+	private LinearInterpolator mLinearInterpolator = new LinearInterpolator();
+	private static final float LINEAR_MAX_RADIX_SEGMENT = 0.92f;
+	private static final float ACCELERATE_DECELERATE_MAX_RADIX_SEGMENT = 1f;
 
+	/**
+	 * 进度放大倍数
+	 */
 	private static final int RADIX = 100;
+	private AnimatorSet mClosingAnimatorSet;
+
 	private ValueAnimator.AnimatorUpdateListener mListener = new ValueAnimator.AnimatorUpdateListener() {
 		@Override
 		public void onAnimationUpdate(ValueAnimator animation) {
-
-//			Log.i(TAG, "animation:" + (int) mPrimaryAnimator.getAnimatedValue());
 			setProgressImmediately((int) mPrimaryAnimator.getAnimatedValue());
 		}
 	};
-	private AnimatorSet mClosingAnimatorSet;
+	private boolean mWrap;
+	private int mDuration;
+	private int mResID;
+
+	public static CoolIndicator create(Activity activity) {
+		return new CoolIndicator(activity, null, android.R.style.Widget_Material_ProgressBar_Horizontal);
+	}
 
 	public CoolIndicator(@NonNull Context context) {
 		super(context, null);
@@ -104,11 +120,11 @@ public class CoolIndicator extends ProgressBar {
 	private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
 		tempRect = new Rect();
 
-		this.setProgressDrawable(context.getResources().getDrawable(R.drawable.drawable_indicator));
+//		this.setProgressDrawable(context.getResources().getDrawable(R.drawable.default_drawable_indicator));
 		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CoolIndicator);
-		final int duration = a.getInteger(R.styleable.CoolIndicator_shiftDuration, 1000);
-		final int resID = a.getResourceId(R.styleable.CoolIndicator_shiftInterpolator, 0);
-		final boolean wrap = a.getBoolean(R.styleable.CoolIndicator_wrapShiftDrawable, true);
+		mDuration = a.getInteger(R.styleable.CoolIndicator_shiftDuration, 1000);
+		mResID = a.getResourceId(R.styleable.CoolIndicator_shiftInterpolator, 0);
+		mWrap = a.getBoolean(R.styleable.CoolIndicator_wrapShiftDrawable, true);
 
 		mPrimaryAnimator = ValueAnimator.ofInt(getProgress(), getMax());
 		mPrimaryAnimator.setInterpolator(new LinearInterpolator());
@@ -126,7 +142,7 @@ public class CoolIndicator extends ProgressBar {
 		});
 
 		mClosingAnimatorSet = new AnimatorSet();
-		mAlphaAnimator.setDuration(CLOSING_DURATION );
+		mAlphaAnimator.setDuration(CLOSING_DURATION);
 		mAlphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
@@ -185,7 +201,9 @@ public class CoolIndicator extends ProgressBar {
 		});
 
 		mClosingAnimatorSet.playTogether(mShrinkAnimator, mAlphaAnimator);
-		setProgressDrawable(buildWrapDrawable(getProgressDrawable(), wrap, duration, resID));
+		if (getProgressDrawable() != null) {
+			setProgressDrawable(buildWrapDrawable(getProgressDrawable(), mWrap, mDuration, mResID));
+		}
 
 		a.recycle();
 	}
@@ -196,8 +214,8 @@ public class CoolIndicator extends ProgressBar {
 	public void setProgress(int nextProgress) {
 	}
 
+
 	private void setProgressInternal(int nextProgress) {
-		nextProgress *= RADIX;
 		nextProgress = Math.min(nextProgress, getMax());
 		nextProgress = Math.max(0, nextProgress);
 		mExpectedProgress = nextProgress;
@@ -211,8 +229,10 @@ public class CoolIndicator extends ProgressBar {
 			if (nextProgress == getMax()) {
 				Log.i(TAG, "finished duration:" + (FINISHED_DURATION * (1 - (Float.valueOf(getProgress()) / getMax()))));
 				mPrimaryAnimator.setDuration((long) (FINISHED_DURATION * (1 - ((Float.valueOf(getProgress()) / getMax())))));
+				mPrimaryAnimator.setInterpolator(mAccelerateDecelerateInterpolator);
 			} else {
 				mPrimaryAnimator.setDuration((long) (PROGRESS_DURATION * (1 - ((Float.valueOf(getProgress()) / (getMax() * 0.92))))));
+				mPrimaryAnimator.setInterpolator(mLinearInterpolator);
 			}
 			mPrimaryAnimator.cancel();
 			mPrimaryAnimator.setIntValues(getProgress(), nextProgress);
@@ -230,8 +250,11 @@ public class CoolIndicator extends ProgressBar {
 		}
 	}
 
-	private boolean mIsRunning = false;
-	private boolean mIsRunningCompleteAnimation = false;
+
+	@Override
+	public void setProgressDrawable(Drawable d) {
+		super.setProgressDrawable(buildWrapDrawable(d, mWrap, mDuration, mResID));
+	}
 
 	public void start() {
 		Log.i(TAG, "start:" + mIsRunning);
@@ -241,7 +264,7 @@ public class CoolIndicator extends ProgressBar {
 		mIsRunning = true;
 		this.setVisibility(View.VISIBLE);
 		setProgressImmediately(0);
-		setProgressInternal(92);
+		setProgressInternal((int) (getMax() * LINEAR_MAX_RADIX_SEGMENT));
 	}
 
 	public void complete() {
@@ -250,7 +273,7 @@ public class CoolIndicator extends ProgressBar {
 		}
 		if (mIsRunning) {
 			mIsRunningCompleteAnimation = true;
-			setProgressInternal(100);
+			setProgressInternal((int) (getMax() * ACCELERATE_DECELERATE_MAX_RADIX_SEGMENT));
 		}
 	}
 
@@ -320,6 +343,24 @@ public class CoolIndicator extends ProgressBar {
 		super.setProgress(progress);
 	}
 
+	@Override
+	protected void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+
+		if (mPrimaryAnimator != null) {
+			mPrimaryAnimator.cancel();
+		}
+		if (mClosingAnimatorSet != null) {
+			mClosingAnimatorSet.cancel();
+		}
+		if (mShrinkAnimator != null) {
+			mShrinkAnimator.cancel();
+		}
+		if (mAlphaAnimator != null) {
+			mAlphaAnimator.cancel();
+		}
+
+	}
 
 	private Drawable buildWrapDrawable(Drawable original, boolean isWrap, int duration, int resID) {
 		if (isWrap) {
@@ -327,6 +368,7 @@ public class CoolIndicator extends ProgressBar {
 					? AnimationUtils.loadInterpolator(getContext(), resID)
 					: null;
 			final ShiftDrawable wrappedDrawable = new ShiftDrawable(original, duration, interpolator);
+			Log.i(TAG, "wrappedDrawable:" + (wrappedDrawable != null) + "   orgin:" + (original != null));
 			return wrappedDrawable;
 		} else {
 			return original;
