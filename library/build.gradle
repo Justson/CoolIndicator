@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 26
 
@@ -32,7 +34,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    compile 'com.just.agentweb:agentweb:4.0.0-beta'
-    compile 'com.just.agentweb:download:4.0.0-beta'
-    compile 'com.just.agentweb:filechooser:4.0.0-beta'
+}
+publish {
+    userOrg = 'just'
+    groupId = 'com.coolindicator.sdk'
+    artifactId = 'coolindicator'
+    version = '1.0.0-beta'
+    description = 'Give WebView a cool indicator'
+    website = "https://github.com/Justson/CoolIndicator.git"
+
 }

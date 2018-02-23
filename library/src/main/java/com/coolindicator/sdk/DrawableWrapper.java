@@ -42,7 +42,11 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-
+/**
+ * @author cenxiaozhong
+ * @date 2018/2/23
+ * @since 1.0.0
+ */
 public class DrawableWrapper extends Drawable {
 
     private final Drawable mWrapped;

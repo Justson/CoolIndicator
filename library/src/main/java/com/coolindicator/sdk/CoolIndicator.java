@@ -1,5 +1,3 @@
-
-
 /*
  * MIT License
  *
@@ -51,7 +49,11 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
 
-
+/**
+ * @author cenxiaozhong
+ * @date 2018/2/23
+ * @since 1.0.0
+ */
 public class CoolIndicator extends ProgressBar {
 	private final static int PROGRESS_DURATION = 6000;
 	private final static int CLOSING_DELAY = 200;
@@ -62,7 +64,7 @@ public class CoolIndicator extends ProgressBar {
 	private ValueAnimator mAlphaAnimator = ValueAnimator.ofFloat(1f, 0.25f);
 	private float mClipRegion = 0f;
 	private int mExpectedProgress = 0;
-	private Rect tempRect;
+	private Rect mTempRect;
 	private boolean mIsRtl;
 	private static final String TAG = CoolIndicator.class.getSimpleName();
 	private boolean mIsRunning = false;
@@ -71,7 +73,9 @@ public class CoolIndicator extends ProgressBar {
 	private LinearInterpolator mLinearInterpolator = new LinearInterpolator();
 	private static final float LINEAR_MAX_RADIX_SEGMENT = 0.92f;
 	private static final float ACCELERATE_DECELERATE_MAX_RADIX_SEGMENT = 1f;
-
+	private boolean mWrap;
+	private int mDuration;
+	private int mResID;
 	/**
 	 * 进度放大倍数
 	 */
@@ -84,9 +88,6 @@ public class CoolIndicator extends ProgressBar {
 			setProgressImmediately((int) mPrimaryAnimator.getAnimatedValue());
 		}
 	};
-	private boolean mWrap;
-	private int mDuration;
-	private int mResID;
 
 	public static CoolIndicator create(Activity activity) {
 		return new CoolIndicator(activity, null, android.R.style.Widget_Material_ProgressBar_Horizontal);
@@ -118,9 +119,8 @@ public class CoolIndicator extends ProgressBar {
 	}
 
 	private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
-		tempRect = new Rect();
+		mTempRect = new Rect();
 
-//		this.setProgressDrawable(context.getResources().getDrawable(R.drawable.default_drawable_indicator));
 		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CoolIndicator);
 		mDuration = a.getInteger(R.styleable.CoolIndicator_shiftDuration, 1000);
 		mResID = a.getResourceId(R.styleable.CoolIndicator_shiftInterpolator, 0);
@@ -206,6 +206,7 @@ public class CoolIndicator extends ProgressBar {
 		}
 
 		a.recycle();
+		setMax(100);
 	}
 
 
@@ -291,15 +292,15 @@ public class CoolIndicator extends ProgressBar {
 		if (mClipRegion == 0) {
 			super.onDraw(canvas);
 		} else {
-			canvas.getClipBounds(tempRect);
-			final float clipWidth = tempRect.width() * mClipRegion;
+			canvas.getClipBounds(mTempRect);
+			final float clipWidth = mTempRect.width() * mClipRegion;
 			final int saveCount = canvas.save();
 
 
 			if (mIsRtl) {
-				canvas.clipRect(tempRect.left, tempRect.top, tempRect.right - clipWidth, tempRect.bottom);
+				canvas.clipRect(mTempRect.left, mTempRect.top, mTempRect.right - clipWidth, mTempRect.bottom);
 			} else {
-				canvas.clipRect(tempRect.left + clipWidth, tempRect.top, tempRect.right, tempRect.bottom);
+				canvas.clipRect(mTempRect.left + clipWidth, mTempRect.top, mTempRect.right, mTempRect.bottom);
 			}
 			super.onDraw(canvas);
 			canvas.restoreToCount(saveCount);

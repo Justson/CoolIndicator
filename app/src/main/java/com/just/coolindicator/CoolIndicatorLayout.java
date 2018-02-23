@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.coolindicator.sdk;
+package com.just.coolindicator;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,10 +33,15 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.coolindicator.sdk.CoolIndicator;
 import com.just.agentweb.AgentWebUtils;
 import com.just.agentweb.BaseIndicatorView;
 
-
+/**
+ * @author cenxiaozhong
+ * @date 2018/2/23
+ * @since 1.0.0
+ */
 public class CoolIndicatorLayout extends BaseIndicatorView {
 	public CoolIndicatorLayout(Context context) {
 		this(context, null);
@@ -53,9 +58,9 @@ public class CoolIndicatorLayout extends BaseIndicatorView {
 		super(context, attrs, defStyleAttr);
 		mCoolIndicator = CoolIndicator.create((Activity) context);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			mCoolIndicator.setProgressDrawable(context.getResources().getDrawable(R.drawable.default_drawable_indicator, context.getTheme()));
+			mCoolIndicator.setProgressDrawable(context.getResources().getDrawable(com.coolindicator.sdk.R.drawable.default_drawable_indicator, context.getTheme()));
 		} else {
-			mCoolIndicator.setProgressDrawable(context.getResources().getDrawable(R.drawable.default_drawable_indicator));
+			mCoolIndicator.setProgressDrawable(context.getResources().getDrawable(com.coolindicator.sdk.R.drawable.default_drawable_indicator));
 		}
 
 		this.addView(mCoolIndicator, offerLayoutParams());

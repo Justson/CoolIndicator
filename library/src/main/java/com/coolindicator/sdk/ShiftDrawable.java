@@ -35,7 +35,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-
+/**
+ * @author cenxiaozhong
+ * @date 2018/2/23
+ * @since 1.0.0
+ */
 public class ShiftDrawable extends DrawableWrapper {
 
     private final ValueAnimator mAnimator = ValueAnimator.ofFloat(0f, 1f);
