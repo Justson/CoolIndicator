@@ -24,10 +24,15 @@
 
 package com.just.coolindicator;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import com.coolindicator.sdk.CoolIndicator;
 
 /**
  * @author cenxiaozhong
@@ -35,11 +40,42 @@ import android.support.v7.app.AppCompatActivity;
  * @since 1.0.0
  */
 
-public class WebActivity  extends AppCompatActivity{
+public class WebActivity extends AppCompatActivity {
 
+
+	private WebView mWebView;
+	private CoolIndicator mCoolIndicator;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
 		super.onCreate(savedInstanceState, persistentState);
+		setContentView(R.layout.activity_web);
+		mWebView = this.findViewById(R.id.webview);
+		mCoolIndicator = this.findViewById(R.id.indicator);
+		mWebView.getSettings().setJavaScriptEnabled(true);
+
+		mWebView.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				super.onPageStarted(view, url, favicon);
+				mCoolIndicator.start();
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+				mCoolIndicator.complete();
+			}
+		});
+		mWebView.loadUrl("https://m.vip.com/?source=www&jump_https=1");
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mWebView != null) {
+			mWebView.destroy();
+		}
 	}
 }
