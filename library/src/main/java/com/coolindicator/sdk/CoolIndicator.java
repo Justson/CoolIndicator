@@ -202,7 +202,7 @@ public class CoolIndicator extends ProgressBar {
 
 		mClosingAnimatorSet.playTogether(mShrinkAnimator, mAlphaAnimator);
 		if (getProgressDrawable() != null) {
-			setProgressDrawable(buildWrapDrawable(getProgressDrawable(), mWrap, mDuration, mResID));
+			setProgressDrawableImmediately(buildWrapDrawable(getProgressDrawable(), mWrap, mDuration, mResID));
 		}
 
 		a.recycle();
@@ -250,6 +250,9 @@ public class CoolIndicator extends ProgressBar {
 		}
 	}
 
+	private void setProgressDrawableImmediately(Drawable drawable) {
+		super.setProgressDrawable(drawable);
+	}
 
 	@Override
 	public void setProgressDrawable(Drawable d) {
@@ -277,9 +280,6 @@ public class CoolIndicator extends ProgressBar {
 		}
 	}
 
-	public void cancel() {
-
-	}
 
 	@Override
 	public synchronized void setMax(int max) {

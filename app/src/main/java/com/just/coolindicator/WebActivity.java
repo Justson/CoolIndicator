@@ -26,9 +26,10 @@ package com.just.coolindicator;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -45,19 +46,26 @@ public class WebActivity extends AppCompatActivity {
 
 	private WebView mWebView;
 	private CoolIndicator mCoolIndicator;
+	private static final String TAG = WebActivity.class.getSimpleName();
 
 	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-		super.onCreate(savedInstanceState, persistentState);
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_web);
 		mWebView = this.findViewById(R.id.webview);
 		mCoolIndicator = this.findViewById(R.id.indicator);
-		mWebView.getSettings().setJavaScriptEnabled(true);
-
+		mCoolIndicator.setMax(100);
+		WebSettings mWebSettings = mWebView.getSettings();
+		mWebSettings.setJavaScriptEnabled(true);
+		mWebSettings.setTextZoom(100);
+		mWebSettings.setDatabaseEnabled(true);
+		mWebSettings.setAppCacheEnabled(true);
+		mWebSettings.setSupportZoom(true);
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
+				Log.i(TAG, "onPageStarted");
 				mCoolIndicator.start();
 			}
 

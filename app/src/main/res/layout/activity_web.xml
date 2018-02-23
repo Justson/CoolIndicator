@@ -16,6 +16,8 @@
 
     <com.coolindicator.sdk.CoolIndicator
         android:id="@+id/indicator"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/default_drawable_indicator"
         android:layout_width="match_parent"
         android:layout_height="3dp"/>
 </FrameLayout>
