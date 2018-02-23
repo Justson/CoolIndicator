@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'com.novoda.bintray-release'
 android {
@@ -23,6 +22,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions{
+        abortOnError false
+    }
 
 }
 
@@ -41,6 +43,6 @@ publish {
     artifactId = 'coolindicator'
     version = '1.0.0-beta'
     description = 'Give WebView a cool indicator'
-    website = "https://github.com/Justson/CoolIndicator.git"
+    website = "https://github.com/Justson/CoolIndicator"
 
 }
