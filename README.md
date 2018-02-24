@@ -1,5 +1,8 @@
 # CoolIndicator
 
-## Gradle
+## 引入
 
-* compile 'com.coolindicator.sdk:coolindicator:1.0.0-beta'
+* Gradle
+```gradle
+compile 'com.coolindicator.sdk:coolindicator:1.0.0-beta'
+```
