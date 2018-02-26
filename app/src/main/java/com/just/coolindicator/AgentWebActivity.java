@@ -24,6 +24,7 @@
  */
 package com.just.coolindicator;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class AgentWebActivity extends AppCompatActivity {
 				.createAgentWeb()
 				.ready()
 				.go("https://m.vip.com/?source=www&jump_https=1");
+		mAgentWeb.getWebCreator().getWebParentLayout().setBackgroundColor(Color.parseColor("#33333333"));
 	}
 
 	@Override

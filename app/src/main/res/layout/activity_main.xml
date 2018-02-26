@@ -29,8 +29,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.just.coolindicator.MainActivity">
 
 
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="doClick"
-        android:text="AgentWebActivity 使用 CoolIndicator"
+        android:text="AgentWeb 使用 CoolIndicator"
         android:textAllCaps="false"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="63dp"

@@ -261,7 +261,6 @@ public class CoolIndicator extends ProgressBar {
 	}
 
 	public void start() {
-		Log.i(TAG, "start:" + mIsRunning);
 		if (mIsRunning) {
 			return;
 		}
