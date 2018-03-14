@@ -46,7 +46,9 @@ public class ShiftDrawable extends DrawableWrapper {
     private final Rect mVisibleRect = new Rect();
     private Path mPath;
 
-    // align to ScaleDrawable implementation
+    /**
+     * align to ScaleDrawable implementation
+     */
     private static final int MAX_LEVEL = 10000;
 
     private static final int DEFAULT_DURATION = 1000;
