@@ -368,7 +368,6 @@ public class CoolIndicator extends ProgressBar {
 					? AnimationUtils.loadInterpolator(getContext(), resID)
 					: null;
 			final ShiftDrawable wrappedDrawable = new ShiftDrawable(original, duration, interpolator);
-			Log.i(TAG, "wrappedDrawable:" + (wrappedDrawable != null) + "   orgin:" + (original != null));
 			return wrappedDrawable;
 		} else {
 			return original;
