@@ -9,5 +9,5 @@ GIF 有点卡， 实际效果很流畅哦。
 
 
 ```gradle
-compile 'com.coolindicator.sdk:coolindicator:1.0.0-beta'
+implementation 'com.github.Justson:CoolIndicator:v1.0.0'
 ```
